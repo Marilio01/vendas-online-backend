@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({name: 'address'})
+@Entity({name: 'city'})
 export class cityEntity {
   @PrimaryGeneratedColumn('rowid')
   id: number;
@@ -10,7 +10,7 @@ export class cityEntity {
 
   @Column({name: 'name', nullable: false})
   name: string;
-  
+
   @CreateDateColumn({ name: 'created_at'})
   createdAt: Date;
 
