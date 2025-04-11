@@ -10,6 +10,7 @@ import { CacheModule } from 'src/cache/cache.module';
   imports:[CacheModule,
   TypeOrmModule.forFeature([cityEntity])],
   controllers: [CityController],
-  providers: [CityService]
+  providers: [CityService],
+  exports: [CityService]
 })
 export class CityModule {}

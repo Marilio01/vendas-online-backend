@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { hash } from 'bcrypt';
 import { UserEntity } from './entities/user.entity';
@@ -29,4 +29,19 @@ export class UserService {
   async getAllUser(): Promise<UserEntity[]>{
     return this.UserRepository.find();
   }
+
+   async findUserById(userId: number): Promise<UserEntity>{
+    const user = await this.UserRepository.findOne({
+      where:{
+        id:userId,
+
+      },
+    });
+
+    if(!user){
+      throw new NotFoundException(`UserId: ${userId}Not Found`);
+    }
+
+    return user;
+   }
 }
