@@ -6,7 +6,7 @@ import { UserEntity } from '../entities/user.entity';
    createdAt: new Date(),
    email: 'emailmock@emali.com',
    id: 43242,
-   name: 'nameMock',
+   name: 'Marilio',
    password: 'largePassword',
    phone: '321532523532',
    typeUser: UserType.User,
