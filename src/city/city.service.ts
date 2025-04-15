@@ -14,13 +14,19 @@ export class CityService {
   ) {}
 
   async getAllCitiesByStateId(stateId: number): Promise<cityEntity[]> {
-    return this.cacheService.getCache<cityEntity[]>(`state_${stateId}`, () =>
+    const cachedCities = await this.cacheService.getCache<cityEntity[]>(`state_${stateId}`, () =>
       this.cityRepository.find({
         where: {
           stateId,
         },
-      }),
+      })
     );
+  
+    if (cachedCities === null) {
+      return []; 
+    }
+  
+    return cachedCities; 
   }
   async findCityById(cityId: number): Promise<cityEntity> {
     const city = await this.cityRepository.findOne({
