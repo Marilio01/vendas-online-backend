@@ -36,6 +36,7 @@ import { Test, TestingModule } from '@nestjs/testing';
            provide: getRepositoryToken(AddressEntity),
            useValue: {
              save: jest.fn().mockResolvedValue(addressMock),
+             find: jest.fn().mockResolvedValue([addressMock]),
            },
          },
        ],
@@ -80,4 +81,20 @@ import { Test, TestingModule } from '@nestjs/testing';
        service.createAddress(createAddressMock, userEntityMock.id),
      ).rejects.toThrowError();
    });
+ 
+   it('should return all addresses to user', async () => {
+     const addresses = await service.findAddressByUserId(userEntityMock.id);
+ 
+     expect(addresses).toEqual([addressMock]);
+   });
+ 
+   it('should return not found if no addresses registered', async () => {
+
+    jest.spyOn(addressRepository, 'find').mockResolvedValue([]);
+  
+    await expect(
+      service.findAddressByUserId(userEntityMock.id),
+    ).rejects.toThrowError(); 
+  });
+  
  });
