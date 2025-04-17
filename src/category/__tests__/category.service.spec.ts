@@ -79,11 +79,21 @@ import { Test, TestingModule } from '@nestjs/testing';
   });
 
   it('should return error if category find by name empty', async () => {
-    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null); // Corrigido aqui
+    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null); 
 
     await expect(
       service.findCategoryByName(categoryMock.name),
-    ).rejects.toThrowError(); // Adicionando await para capturar a rejeição da promise
+    ).rejects.toThrowError(); 
+  });
+  it('should return category in find by id', async () => {
+    const category = await service.findCategoryById(categoryMock.id);
+
+    expect(category).toEqual(categoryMock);
   });
 
+  it('should return error in not found category id', async () => {
+    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null); 
+
+    await expect(service.findCategoryById(categoryMock.id)).rejects.toThrowError(); 
+});
  });
