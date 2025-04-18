@@ -11,9 +11,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { RolesGuard } from './guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { CategoryModule } from './category/category.module';
- import { ProductModule } from './product/product.module';
-
-
+import { ProductModule } from './product/product.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -30,7 +29,6 @@ import { CategoryModule } from './category/category.module';
       entities: [`${__dirname}/**/*.entity{.js,.ts}`],
       migrations: [`${__dirname}/migration/{.ts,*.js}`],
       migrationsRun: true,
-
     }),
     UserModule,
     StateModule,
@@ -41,6 +39,7 @@ import { CategoryModule } from './category/category.module';
     JwtModule,
     CategoryModule,
     ProductModule,
+    CartModule,
   ],
   controllers: [],
   providers: [
@@ -48,7 +47,6 @@ import { CategoryModule } from './category/category.module';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-   
   ],
 })
 export class AppModule {}
