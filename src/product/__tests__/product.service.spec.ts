@@ -7,7 +7,7 @@ import { ProductEntity } from '../entities/product.entity';
 import { ProductService } from '../product.service';
 import { createProductMock } from '../__mocks__/create-product.mock';
 import { returnDeleteMock } from '../../__mocks__/return-delete.mock';
-import { productMock } from '../__mocks__/product.mok';
+import { productMock } from '../__mocks__/product.mock';
 
 describe('ProductService', () => {
   let service: ProductService;
