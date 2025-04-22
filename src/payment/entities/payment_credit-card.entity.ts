@@ -3,12 +3,9 @@ import { PaymentEntity } from './payment.entity';
 import { CreateOrderDTO } from '../../order/dtos/create-order.dto';
 
 @ChildEntity()
-export class PaymentPixEntity extends PaymentEntity {
-  @Column({ name: 'code', nullable: false })
-  code: string;
-
-  @Column({ name: 'date_payment', nullable: false })
-  datePayment: Date;
+export class PaymentCreditCardEntity extends PaymentEntity {
+  @Column({ name: 'amount_payments', nullable: false })
+  amountPayments: number;
 
   constructor(
     statusId: number,
@@ -18,7 +15,6 @@ export class PaymentPixEntity extends PaymentEntity {
     createOrderDTO: CreateOrderDTO,
   ) {
     super(statusId, price, discount, finalPrice);
-    this.code = createOrderDTO?.codePix || '';
-    this.datePayment = new Date(createOrderDTO?.datePayment || '');
+    this.amountPayments = createOrderDTO?.amountPayments || 0;
   }
 }
