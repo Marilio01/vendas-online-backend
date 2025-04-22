@@ -1,7 +1,7 @@
 import {
   Body,
   Controller,
-  Param,
+  Get,
   Post,
   UsePipes,
   ValidationPipe,
@@ -9,6 +9,7 @@ import {
 import { UserId } from '../decorators/user-id.decorator';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { OrderService } from './order.service';
+import { OrderEntity } from './entities/order.entity';
 
 @Controller('order')
 export class OrderController {
@@ -18,9 +19,13 @@ export class OrderController {
   @UsePipes(ValidationPipe)
   async createOrder(
     @Body() createOrderDTO: CreateOrderDTO,
-    @Param('cartId') cartId: number,
     @UserId() userId: number,
   ) {
     return this.orderService.createOrder(createOrderDTO, userId);
+  }
+
+  @Get()
+  async findOrdersByUserId(@UserId() userId: number): Promise<OrderEntity[]> {
+    return this.orderService.findOrdersByUserId(userId);
   }
 }
