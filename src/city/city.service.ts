@@ -14,19 +14,21 @@ export class CityService {
   ) {}
 
   async getAllCitiesByStateId(stateId: number): Promise<cityEntity[]> {
-    const cachedCities = await this.cacheService.getCache<cityEntity[]>(`state_${stateId}`, () =>
-      this.cityRepository.find({
-        where: {
-          stateId,
-        },
-      })
+    const cachedCities = await this.cacheService.getCache<cityEntity[]>(
+      `state_${stateId}`,
+      () =>
+        this.cityRepository.find({
+          where: {
+            stateId,
+          },
+        }),
     );
-  
+
     if (cachedCities === null) {
-      return []; 
+      return [];
     }
-  
-    return cachedCities; 
+
+    return cachedCities;
   }
   async findCityById(cityId: number): Promise<cityEntity> {
     const city = await this.cityRepository.findOne({
@@ -38,6 +40,29 @@ export class CityService {
     if (!city) {
       throw new NotFoundException(`CityId: ${cityId} Not Found.`);
     }
+    return city;
+  }
+
+  async findCityByName(
+    nameCity: string,
+    nameState: string,
+  ): Promise<cityEntity> {
+    const city = await this.cityRepository.findOne({
+      where: {
+        name: nameCity,
+        state: {
+          uf: nameState,
+        },
+      },
+      relations: {
+        state: true,
+      },
+    });
+
+    if (!city) {
+      throw new NotFoundException(`City not found.`);
+    }
+
     return city;
   }
 }
