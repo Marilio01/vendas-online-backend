@@ -14,6 +14,7 @@ import { ReturnUserDto } from '../../user/dtos/returnUser.dto';
    address?: ReturnAddressDto;
    payment?: ReturnPaymentDTO;
    ordersProduct?: ReturnOrderProductDTO[];
+   amountProducts?: number;
  
    constructor(order: OrderEntity) {
      this.id = order.id;
@@ -33,5 +34,6 @@ import { ReturnUserDto } from '../../user/dtos/returnUser.dto';
          (orderProduct) => new ReturnOrderProductDTO(orderProduct),
        )
      : undefined;
+     this.amountProducts = order.amountProducts;
    }
  }
