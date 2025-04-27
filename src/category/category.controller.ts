@@ -14,7 +14,7 @@ import {
  import { CategoryEntity } from './entities/category.entity';
  
 
- @Roles(UserType.Admin, UserType.User)
+ @Roles(UserType.Admin, UserType.Root, UserType.User)
  @Controller('category')
  export class CategoryController {
    constructor(private readonly categoryService: CategoryService) {}
@@ -24,7 +24,7 @@ import {
     return this.categoryService.findAllCategories();
    }
    
-   @Roles(UserType.Admin,)
+   @Roles(UserType.Admin, UserType.Root,)
    @UsePipes(ValidationPipe)
    @Post()
    async createCategory(
