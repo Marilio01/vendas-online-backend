@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AxiosError } from 'axios';
-import { CityService } from 'src/city/city.service';
+import { CityService } from '../city/city.service';
 import { ReturnCepExternal } from './dtos/return-cep-external.dto';
 import { ReturnCep } from './dtos/return-cep.dto';
 import { cityEntity } from '../city/entities/city.entity';
