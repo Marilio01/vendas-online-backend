@@ -9,6 +9,7 @@ import { ReturnCategory } from '../dtos/return-category.dto';
 import { countProductMock } from '../__mocks__/count-product.mock';
 import { ProductService } from '../../product/product.service';
 import { returnDeleteMock } from '../../__mocks__/return-delete.mock';
+import { updateCategoryMock } from '../__mocks__/update-category.mock';
 
 describe('CategoryService', () => {
   let service: CategoryService;
@@ -133,6 +134,26 @@ describe('CategoryService', () => {
       relations: {
         products: true,
       },
+    });
+  });
+  it('should return category in update category', async () => {
+    const spy = jest.spyOn(categoryRepository, 'findOne');
+    const category = await service.editCategory(
+      categoryMock.id,
+      updateCategoryMock,
+    );
+
+    expect(category).toEqual(categoryMock);
+    expect(spy.mock.calls.length > 0).toEqual(true);
+  });
+
+  it('should send new category to save', async () => {
+    const spy = jest.spyOn(categoryRepository, 'save');
+    await service.editCategory(categoryMock.id, updateCategoryMock);
+
+    expect(spy.mock.calls[0][0]).toEqual({
+      ...categoryMock,
+      ...updateCategoryMock,
     });
   });
 });

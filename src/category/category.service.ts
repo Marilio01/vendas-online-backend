@@ -13,6 +13,7 @@ import {
  import { ProductService } from '../product/product.service';
  import { ReturnCategory } from './dtos/return-category.dto';
 import { ProductEntity } from '../product/entities/product.entity';
+import { UpdateCategory } from './dtos/update-category.dto';
 
  @Injectable()
 
@@ -120,5 +121,17 @@ import { ProductEntity } from '../product/entities/product.entity';
     }
 
     return this.categoryRepository.delete({ id: categoryId });
+  }
+
+  async editCategory(
+    categoryId: number,
+    updateCategory: UpdateCategory,
+  ): Promise<CategoryEntity> {
+    const category = await this.findCategoryById(categoryId);
+
+    return this.categoryRepository.save({
+      ...category,
+      ...updateCategory,
+    });
   }
  }

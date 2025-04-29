@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Put,
   Post,
   UsePipes,
   ValidationPipe,
@@ -15,6 +16,7 @@ import { DeleteResult } from 'typeorm';
  import { ReturnCategory } from './dtos/return-category.dto';
  import { CreateCategory } from './dtos/create-category.dto';
  import { CategoryEntity } from './entities/category.entity';
+ import { UpdateCategory } from './dtos/update-category.dto';
  
 
  @Roles(UserType.Admin, UserType.Root, UserType.User)
@@ -42,5 +44,15 @@ import { DeleteResult } from 'typeorm';
      @Param('categoryId') categoryId: number,
    ): Promise<DeleteResult> {
      return this.categoryService.deleteCategory(categoryId);
+   }
+
+   @Roles(UserType.Admin, UserType.Root)
+   @UsePipes(ValidationPipe)
+   @Put(':categoryId')
+   async editCategory(
+     @Param('categoryId') categoryId: number,
+     @Body() updateCategory: UpdateCategory,
+   ): Promise<CategoryEntity> {
+     return this.categoryService.editCategory(categoryId, updateCategory);
    }
  }
