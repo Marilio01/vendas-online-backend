@@ -18,12 +18,14 @@ import { ReturnProduct } from './dtos/return-product.dto';
 import { ProductEntity } from './entities/product.entity';
 import { ProductService } from './product.service';
 import { UpdateProductDTO } from './dtos/update-product.dto';
+import { Pagination } from '../dtos/pagination.dto';
 
 @Roles(UserType.Admin, UserType.Root, UserType.User)
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @Roles(UserType.Admin, UserType.Root, UserType.User)
   @Get()
   async findAll(): Promise<ReturnProduct[]> {
     return (await this.productService.findAll([], true)).map(
@@ -33,10 +35,12 @@ export class ProductController {
 
   @Roles(UserType.Admin, UserType.Root, UserType.User)
   @Get('/page')
-  async findAllPage(@Query('search') search: string): Promise<ReturnProduct[]> {
-    return (await this.productService.findAllPage(search)).map(
-      (product) => new ReturnProduct(product),
-    );
+  async findAllPage(
+    @Query('search') search?: string,
+    @Query('size') size?: number,
+    @Query('page') page?: number,
+  ): Promise<Pagination<ReturnProduct[]>> {
+    return this.productService.findAllPage(search, size, page);
   }
 
   @Roles(UserType.Admin, UserType.Root, UserType.User)
