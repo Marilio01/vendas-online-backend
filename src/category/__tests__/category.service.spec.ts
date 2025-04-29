@@ -10,6 +10,7 @@ import { countProductMock } from '../__mocks__/count-product.mock';
 import { ProductService } from '../../product/product.service';
 import { returnDeleteMock } from '../../__mocks__/return-delete.mock';
 import { updateCategoryMock } from '../__mocks__/update-category.mock';
+import { productMock } from '../../product/__mocks__/product.mock';
 
 describe('CategoryService', () => {
   let service: CategoryService;
@@ -134,6 +135,13 @@ describe('CategoryService', () => {
       relations: {
         products: true,
       },
+    });
+  });
+
+  it('should return error if category with relations', async () => {
+    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue({
+      ...categoryMock,
+      products: [productMock],
     });
   });
   it('should return category in update category', async () => {
