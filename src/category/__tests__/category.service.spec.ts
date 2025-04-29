@@ -1,24 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
- import { getRepositoryToken } from '@nestjs/typeorm';
- import { Repository } from 'typeorm';
- import { CategoryService } from '../category.service';
- import { CategoryEntity } from '../entities/category.entity';
- import { categoryMock } from '../__mocks__/category.mock';
- import { createCategoryMock } from '../__mocks__/create-category.mock';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CategoryService } from '../category.service';
+import { CategoryEntity } from '../entities/category.entity';
+import { categoryMock } from '../__mocks__/category.mock';
+import { createCategoryMock } from '../__mocks__/create-category.mock';
 import { ReturnCategory } from '../dtos/return-category.dto';
 import { countProductMock } from '../__mocks__/count-product.mock';
 import { ProductService } from '../../product/product.service';
+import { returnDeleteMock } from '../../__mocks__/return-delete.mock';
 
- describe('CategoryService', () => {
-   let service: CategoryService;
-   let categoryRepository: Repository<CategoryEntity>;
-   let productService: ProductService;
- 
-   beforeEach(async () => {
-     const module: TestingModule = await Test.createTestingModule({
-       providers: [
-         CategoryService,
-         {
+describe('CategoryService', () => {
+  let service: CategoryService;
+  let categoryRepository: Repository<CategoryEntity>;
+  let productService: ProductService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        CategoryService,
+        {
           provide: ProductService,
           useValue: {
             countProdutsByCategoryId: jest
@@ -26,61 +27,61 @@ import { ProductService } from '../../product/product.service';
               .mockResolvedValue([countProductMock]),
           },
         },
-         {
-           provide: getRepositoryToken(CategoryEntity),
-           useValue: {
+        {
+          provide: getRepositoryToken(CategoryEntity),
+          useValue: {
             findOne: jest.fn().mockResolvedValue(categoryMock),
-             find: jest.fn().mockResolvedValue([categoryMock]),
-             save: jest.fn().mockResolvedValue(categoryMock),
-           },
-         },
-       ],
-     }).compile();
- 
-     service = module.get<CategoryService>(CategoryService);
-     productService = module.get<ProductService>(ProductService);
-     categoryRepository = module.get<Repository<CategoryEntity>>(
-       getRepositoryToken(CategoryEntity),
-     );
-   });
- 
-   it('should be defined', () => {
-     expect(service).toBeDefined();
-     expect(productService).toBeDefined();
-     expect(categoryRepository).toBeDefined();
-   });
- 
-   it('should return list category', async () => {
-     const categories = await service.findAllCategories();
- 
-  expect(categories).toEqual([
+            find: jest.fn().mockResolvedValue([categoryMock]),
+            save: jest.fn().mockResolvedValue(categoryMock),
+            delete: jest.fn().mockResolvedValue(returnDeleteMock),
+          },
+        },
+      ],
+    }).compile();
+
+    service = module.get<CategoryService>(CategoryService);
+    productService = module.get<ProductService>(ProductService);
+    categoryRepository = module.get<Repository<CategoryEntity>>(
+      getRepositoryToken(CategoryEntity),
+    );
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+    expect(productService).toBeDefined();
+    expect(categoryRepository).toBeDefined();
+  });
+
+  it('should return list category', async () => {
+    const categories = await service.findAllCategories();
+
+    expect(categories).toEqual([
       new ReturnCategory(categoryMock, countProductMock.total),
     ]);
   });
- 
-   it('should return error in list category empty', async () => {
-     jest.spyOn(categoryRepository, 'find').mockResolvedValue([]);
- 
-     expect(service.findAllCategories()).rejects.toThrowError();
-   });
- 
-   it('should return error in list category exception', async () => {
-     jest.spyOn(categoryRepository, 'find').mockRejectedValue(new Error());
- 
-     expect(service.findAllCategories()).rejects.toThrowError();
-   });
 
-   it('should return error if exist category name', async () => {
+  it('should return error in list category empty', async () => {
+    jest.spyOn(categoryRepository, 'find').mockResolvedValue([]);
+
+    expect(service.findAllCategories()).rejects.toThrowError();
+  });
+
+  it('should return error in list category exception', async () => {
+    jest.spyOn(categoryRepository, 'find').mockRejectedValue(new Error());
+
+    expect(service.findAllCategories()).rejects.toThrowError();
+  });
+
+  it('should return error if exist category name', async () => {
     expect(service.createCategory(createCategoryMock)).rejects.toThrowError();
   });
 
   it('should return category after save', async () => {
-    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null); 
+    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null);
     const category = await service.createCategory(createCategoryMock);
 
     expect(category).toEqual(categoryMock);
   });
-
 
   it('should return error in exception', async () => {
     jest.spyOn(categoryRepository, 'save').mockRejectedValue(new Error());
@@ -95,11 +96,11 @@ import { ProductService } from '../../product/product.service';
   });
 
   it('should return error if category find by name empty', async () => {
-    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null); 
+    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null);
 
     await expect(
       service.findCategoryByName(categoryMock.name),
-    ).rejects.toThrowError(); 
+    ).rejects.toThrowError();
   });
   it('should return category in find by id', async () => {
     const category = await service.findCategoryById(categoryMock.id);
@@ -108,9 +109,30 @@ import { ProductService } from '../../product/product.service';
   });
 
   it('should return error in not found category id', async () => {
-    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null); 
+    jest.spyOn(categoryRepository, 'findOne').mockResolvedValue(null);
 
-    await expect(service.findCategoryById(categoryMock.id)).rejects.toThrowError(); 
+    await expect(
+      service.findCategoryById(categoryMock.id),
+    ).rejects.toThrowError();
+  });
+
+  it('should return delete result in success', async () => {
+    const deleteResult = await service.deleteCategory(categoryMock.id);
+
+    expect(deleteResult).toEqual(returnDeleteMock);
+  });
+
+  it('should send relations in request findOne', async () => {
+    const spy = jest.spyOn(categoryRepository, 'findOne');
+    await service.deleteCategory(categoryMock.id);
+
+    expect(spy.mock.calls[0][0]).toEqual({
+      where: {
+        id: categoryMock.id,
+      },
+      relations: {
+        products: true,
+      },
+    });
+  });
 });
- });
- 
