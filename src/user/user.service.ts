@@ -41,6 +41,14 @@ export class UserService {
 
   }
 
+  async getAdmins(): Promise<UserEntity[]> {
+    return this.UserRepository.find({ where: { typeUser: UserType.Admin } });
+  }
+
+  async clients(): Promise<UserEntity[]> {
+    return this.UserRepository.find({ where: { typeUser: UserType.User } });
+  }
+
   async getUserByIdUsingRelations(userId: number): Promise<UserEntity> {
     const user = await this.UserRepository.findOne({
         where: { id: userId },
@@ -59,7 +67,6 @@ export class UserService {
 
 
   }
-
 
   async getAllUser(): Promise<UserEntity[]>{
     return this.UserRepository.find();

@@ -22,6 +22,18 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Roles(UserType.Root)
+  @Get('/admins')
+  async getAdmins() {
+    return this.userService.getAdmins();
+  }
+
+  @Roles(UserType.Admin, UserType.Root)
+  @Get('/users')
+  async getCommonUsers() {
+    return this.userService.clients();
+  }
+
+  @Roles(UserType.Root)
    @Post('/admin')
    async createAdmin(@Body() createUser: CreateUserDto): Promise<UserEntity> {
      return this.userService.createUser(createUser, UserType.Admin);
