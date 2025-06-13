@@ -41,7 +41,7 @@ export class OrderController {
       (order) => new ReturnOrderDTO(order),
     );
   }
-  @Roles(UserType.Admin, UserType.Root)
+  @Roles(UserType.Admin, UserType.Root, UserType.User)
   @Get('/:orderId')
   async findOrderById(
     @Param('orderId') orderId: number,

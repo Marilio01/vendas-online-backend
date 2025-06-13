@@ -15,6 +15,7 @@ export class PaymentCreditCardEntity extends PaymentEntity {
     createOrderDTO: CreateOrderDTO,
   ) {
     super(statusId, price, discount, finalPrice);
-    this.amountPayments = createOrderDTO?.amountPayments || 0;
+    this.type = 'PaymentCreditCardEntity';
+    this.amountPayments = createOrderDTO?.amountPayments ?? 1;
   }
 }
