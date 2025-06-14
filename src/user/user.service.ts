@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { UserType } from './enum/user-type.enum';
 import { UpdatePasswordDTO } from './dtos/update-password.dto';
 import { createPasswordHashed, validatePassword } from '../utils/password';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -23,12 +24,15 @@ export class UserService {
   createUserDto: CreateUserDto,
   userType?: number,
 ): Promise<UserEntity> {
-    const user = await this.findUserByEmail(createUserDto.email).catch(
-      () => undefined,
-    );
+    const emailExists = await this.findUserByEmail(createUserDto.email).catch(() => undefined,);
+    const cpfExists = await this.findUserByCpf(createUserDto.cpf).catch(() => undefined);
 
-    if (user) {
-      throw new BadGatewayException('email registered in system');
+    if (emailExists) {
+      throw new BadGatewayException('Email já cadastrado no sistema.');
+    }
+
+    if (cpfExists) {
+      throw new BadGatewayException('CPF já cadastrado no sistema.');
     }
 
     const passwordHashed = await createPasswordHashed(createUserDto.password);
@@ -101,6 +105,32 @@ export class UserService {
 
     return user;
    }
+
+   async findUserByCpf(cpf: string): Promise<UserEntity> {
+    const user = await this.UserRepository.findOne({
+      where: {
+        cpf,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with CPF: ${cpf} Not Found`);
+    }
+
+    return user;
+  }
+
+    async updateUser(
+    userId: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    const user = await this.findUserById(userId);
+
+    return this.UserRepository.save({
+      ...user,
+      ...updateUserDto,
+    });
+  }
 
    async updatePasswordUser(
     updatePasswordDTO: UpdatePasswordDTO,

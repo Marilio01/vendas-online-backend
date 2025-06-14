@@ -23,7 +23,7 @@ export class UserEntity {
   @Column({ name: 'phone' })
   phone: string;
 
-  @Column({ name: 'cpf', nullable: false })
+  @Column({ name: 'cpf', nullable: false, unique: true })
   cpf: string;
 
   @Column({ name: 'password', nullable: false })

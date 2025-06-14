@@ -16,6 +16,7 @@ import { UserId } from '../decorators/user-id.decorator';
 import { UpdatePasswordDTO } from './dtos/update-password.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from './enum/user-type.enum';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -76,4 +77,14 @@ export class UserController {
        await this.userService.getUserByIdUsingRelations(userId),
      );
    }
+
+  @Roles(UserType.User, UserType.Admin, UserType.Root)
+  @Patch()
+  @UsePipes(ValidationPipe)
+  async updateUser(
+    @UserId() userId: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    return this.userService.updateUser(userId, updateUserDto);
+  }
 }
