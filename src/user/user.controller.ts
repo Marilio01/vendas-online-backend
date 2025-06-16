@@ -61,7 +61,7 @@ export class UserController {
     );
   }
   @Roles(UserType.Admin, UserType.Root, UserType.User)
-   @Patch()
+   @Patch('/password')
    @UsePipes(ValidationPipe)
    async updatePasswordUser(
      @Body() updatePasswordDTO: UpdatePasswordDTO,
