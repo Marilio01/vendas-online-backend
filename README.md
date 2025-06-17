@@ -1,98 +1,153 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Vendas Online - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este repositório contém o backend para uma aplicação de vendas online, desenvolvido com o framework NestJS. O sistema oferece uma API RESTful completa para gerenciar usuários, produtos, carrinhos de compras, pedidos e pagamentos.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 💻 Front-end
 
-## Description
+Este back-end possui um front-end Angular separado que consome esta API. 
+Para rodar o sistema completo, clone e execute o front-end disponível em: 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[🔗 Acessar o Front-end](https://github.com/Marilio01/vendas-online-web)
 
-## Project setup
+## ⚙️ Principais Funcionalidades
+
+O sistema foi projetado para ser a base de uma plataforma de e-commerce, resolvendo problemas comuns de gestão de vendas e usuários.
+
+* **Autenticação e Gestão de Usuários:**
+    * Cadastro e login de usuários com autenticação segura baseada em JWT (JSON Web Tokens).
+    * Sistema de controle de acesso baseado em papéis (Roles), diferenciando Usuários comuns, Administradores e Root (`User`, `Admin`, `Root`).
+    * Funcionalidades para atualização de senha e dados cadastrais do usuário.
+
+* **Gerenciamento de Endereços:**
+    * Cadastro de múltiplos endereços por usuário.
+    * Integração com a API dos Correios para consulta de CEP e preenchimento automático de dados de endereço.
+
+* **Catálogo de Produtos e Categorias:**
+    * Operações CRUD (Criar, Ler, Atualizar, Deletar) completas para produtos e categorias.
+    * Busca paginada de produtos com suporte a filtros.
+
+* **Carrinho de Compras:**
+    * Funcionalidades para adicionar, atualizar e remover produtos do carrinho de um usuário.
+    * O carrinho é persistido no banco de dados, permitindo que o usuário continue suas compras em diferentes sessões.
+
+* **Gestão de Pedidos e Pagamentos:**
+    * Fluxo completo de criação de pedidos a partir dos itens do carrinho.
+    * Integração com diferentes tipos de pagamento, incluindo Pix e Cartão de Crédito.
+    * Armazenamento do histórico de pedidos por usuário.
+
+* **Database Migrations:**
+    * Gerenciamento automatizado do esquema do banco de dados através das migrações do TypeORM.
+
+## ✨ Características do Sistema Desenvolvido
+
+* **Framework:** O projeto é construído sobre o **NestJS**, um framework Node.js progressivo que utiliza TypeScript, garantindo um código manutenível, escalável e bem-estruturado.
+
+* **Linguagem:** Desenvolvido em **TypeScript**, o que adiciona tipagem estática ao JavaScript, aumentando a robustez e a produtividade no desenvolvimento.
+
+* **Arquitetura:**
+    * **Arquitetura Modular:** O sistema é organizado em módulos (`UserModule`, `ProductModule`, `OrderModule`, etc.), promovendo uma clara separação de responsabilidades e facilitando a manutenção e a escalabilidade.
+    * **Princípios S.O.L.I.D:** A estrutura segue os princípios de design de software S.O.L.I.D para criar um código mais limpo e coeso.
+
+* **Banco de Dados e ORM:**
+    * Utiliza **PostgreSQL** como sistema de gerenciamento de banco de dados.
+    * O mapeamento objeto-relacional é gerenciado pelo **TypeORM**, que também é responsável pela execução automática das migrações de banco de dados (`migrationsRun: true`).
+
+* **Validação de Dados:**
+    * Uso intensivo de Data Transfer Objects (DTOs) em conjunto com os pacotes `class-validator` e `class-transformer` para garantir que os dados que chegam à API sejam válidos e seguros.
+
+* **Cache:**
+    * Implementa uma camada de cache com `@nestjs/cache-manager` para otimizar o desempenho de consultas frequentes, como a busca por cidades e estados.
+
+## 🚀 Instruções de Execução
+
+Siga os passos abaixo para instalar, configurar e executar o projeto em seu ambiente local.
+
+### Pré-requisitos
+
+* [Node.js](https://nodejs.org/) (versão >= 20.11)
+* Uma instância do **PostgreSQL** em execução
+
+### 1. Instalação
+
+Primeiro, clone o repositório para a sua máquina:
 
 ```bash
-$ npm install
+https://github.com/Marilio01/vendas-online-backend.git
 ```
 
-## Compile and run the project
+Acesse o diretório do projeto:
+```bash
+cd vendas-online-backend
+```
+
+Em seguida, instale as dependências do projeto:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 2. Configuração do Ambiente
+
+O projeto utiliza variáveis de ambiente para configurar a conexão com o banco de dados e outras configurações sensíveis.
+
+Crie um arquivo chamado `.env.development.local` na raiz do projeto.
+
+Preencha o arquivo com as seguintes variáveis, substituindo pelos valores do seu ambiente local:
+
+```env
+# Configurações do Banco de Dados PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=seu_usuario_do_banco
+DB_PASSWORD=sua_senha_do_banco
+DB_DATABASE=seu_banco_de_dados
+
+# Configurações do JWT
+JWT_SECRET=sua_chave_secreta_para_jwt
+JWT_EXPIRE_IN=7d
+
+# URL do Serviço dos Correios
+URL_CEP_CORREIOS=https://viacep.com.br/ws/{CEP}/json/
+
+# Porta da Aplicação
+PORT=8080
+```
+
+### 3. Executando a Aplicação
+
+Com as dependências instaladas e o ambiente configurado, você pode executar a aplicação com os seguintes comandos:
+
+#### Modo de Desenvolvimento (com watch)
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run start:dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+#### Modo de Produção
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+# 1. Compilar o projeto
+npm run build
+
+# 2. Iniciar o servidor de produção
+npm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 4. Executando os Testes
 
-## Resources
+O projeto conta com uma suíte de testes unitários e de integração. Para executá-los, utilize:
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+# Executar todos os testes
+npm run test
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Executar os testes em modo watch
+npm run test:watch
 
-## Support
+# Gerar o relatório de cobertura de testes
+npm run test:cov
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🖼️ Modelo de Dados
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+![Image](https://github.com/user-attachments/assets/37a3e901-a96a-4373-a0ab-32c25fec5acb)
