@@ -5,6 +5,8 @@ import {
   Post,
   UsePipes,
   ValidationPipe,
+  Param,
+  Delete,
 } from '@nestjs/common';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from '../user/enum/user-type.enum';
@@ -34,5 +36,11 @@ export class AddressController {
     return (await this.addressService.findAddressByUserId(userId)).map(
       (address) => new ReturnAddressDto(address),
     );
+  }
+
+  @Delete(':addressId')
+  async deleteAddress(@Param('addressId') addressId: number): Promise<{ success: boolean }> {
+    await this.addressService.deleteAddress(addressId);
+    return { success: true };
   }
 }

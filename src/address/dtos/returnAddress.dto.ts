@@ -6,6 +6,8 @@ export class ReturnAddressDto {
   complement: string;
   numberAddress: number;
   cep: string;
+  street: string; 
+  neighborhood: string; 
   city?: ReturnCityDto;
 
   constructor(address: AddressEntity) {
@@ -13,6 +15,8 @@ export class ReturnAddressDto {
     this.complement = address.complement;
     this.numberAddress = address.numberAddress;
     this.cep = address.cep;
+    this.street = address.street;      
+    this.neighborhood = address.neighborhood;
     this.city = address.city ? new ReturnCityDto(address.city) : undefined;
   }
 }

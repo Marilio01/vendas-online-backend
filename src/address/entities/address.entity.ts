@@ -32,6 +32,12 @@ export class AddressEntity {
   @Column({ name: 'city_id', nullable: false })
   cityId: number;
 
+  @Column({ name: 'street', nullable: false })
+  street: string;
+
+  @Column({ name: 'neighborhood', nullable: false })
+  neighborhood: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

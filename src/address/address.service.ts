@@ -45,4 +45,14 @@ export class AddressService {
 
     return addresses;
   }
+
+  async deleteAddress(addressId: number): Promise<void> {
+    const address = await this.addressRepository.findOneBy({ id: addressId });
+
+    if (!address) {
+      throw new NotFoundException(`Endereço com ID ${addressId} não foi encontrado.`);
+    }
+    
+    await this.addressRepository.delete(addressId);
+  }
 }
