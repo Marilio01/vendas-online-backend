@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAddressDto } from './dtos/createAddress.dto';
@@ -27,20 +31,15 @@ export class AddressService {
       userId,
     });
   }
+
   async findAddressByUserId(userId: number): Promise<AddressEntity[]> {
     const addresses = await this.addressRepository.find({
-      where: {
-        userId,
-      },
-      relations: {
-        city: {
-          state: true,
-        },
-      },
+      where: { userId },
+      relations: { city: { state: true } },
     });
 
     if (!addresses || addresses.length === 0) {
-      throw new NotFoundException(`Address not found for userId: ${userId}`);
+      throw new NotFoundException(`Nenhum endereço encontrado para este usuário.`);
     }
 
     return addresses;
@@ -52,7 +51,19 @@ export class AddressService {
     if (!address) {
       throw new NotFoundException(`Endereço com ID ${addressId} não foi encontrado.`);
     }
-    
-    await this.addressRepository.delete(addressId);
+
+    try {
+      await this.addressRepository.delete(addressId);
+    } catch (error) {
+      const dbError = error as { code?: string; detail?: string };
+
+      if (dbError.code === '23503') {
+        throw new ConflictException(
+          'Este endereço está vinculado a um pedido e não pode ser removido.',
+        );
+      }
+
+      throw error;
+    }
   }
 }

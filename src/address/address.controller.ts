@@ -29,17 +29,19 @@ export class AddressController {
   ): Promise<AddressEntity> {
     return this.addressService.createAddress(createAddressDto, userId);
   }
+
   @Get()
   async findAddressByUserId(
     @UserId() userId: number,
   ): Promise<ReturnAddressDto[]> {
-    return (await this.addressService.findAddressByUserId(userId)).map(
-      (address) => new ReturnAddressDto(address),
-    );
+    const addresses = await this.addressService.findAddressByUserId(userId);
+    return addresses.map((address) => new ReturnAddressDto(address));
   }
 
   @Delete(':addressId')
-  async deleteAddress(@Param('addressId') addressId: number): Promise<{ success: boolean }> {
+  async deleteAddress(
+    @Param('addressId') addressId: number,
+  ): Promise<{ success: boolean }> {
     await this.addressService.deleteAddress(addressId);
     return { success: true };
   }
