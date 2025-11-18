@@ -12,4 +12,7 @@ export class UpdateProductDTO {
 
   @IsString()
   image: string;
+
+  @IsString()
+  description: string;
 }

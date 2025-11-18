@@ -6,4 +6,5 @@ export const createProductMock: CreateProductDTO = {
   image: 'lkfdjsafkldsa',
   name: 'name mock product',
   price: 25.0,
+  description: 'description product mock',
 };

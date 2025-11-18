@@ -6,6 +6,7 @@ export class ReturnProduct {
   name: string;
   price: number;
   image: string;
+  description: string;
   category?: ReturnCategory;
 
   constructor(productEntity: ProductEntity) {
@@ -13,6 +14,7 @@ export class ReturnProduct {
     this.name = productEntity.name;
     this.price = productEntity.price;
     this.image = productEntity.image;
+    this.description = productEntity.description;
     this.category = productEntity.category
       ? new ReturnCategory(productEntity.category)
       : undefined;

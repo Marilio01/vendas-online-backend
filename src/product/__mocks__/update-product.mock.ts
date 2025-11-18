@@ -6,4 +6,5 @@ export const updateProductMock: UpdateProductDTO = {
   image: 'kjbndabk',
   name: 'gdsaga',
   price: 43.0,
+  description: 'description product mock',
 };

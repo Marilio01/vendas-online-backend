@@ -29,6 +29,9 @@ export class ProductEntity {
   @Column({ name: 'image', nullable: false })
   image: string;
 
+  @Column({ name: 'description', type: 'text', nullable: true })
+  description: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

@@ -19,7 +19,6 @@ import { PaymentModule } from './payment/payment.module';
 import { OrderModule } from './order/order.module';
 import { OrderProductModule } from './order-product/order-product.module';
 import { CorreiosModule } from './correios/correios.module';
- 
 
 @Module({
   imports: [
@@ -36,6 +35,7 @@ import { CorreiosModule } from './correios/correios.module';
       entities: [`${__dirname}/**/*.entity{.js,.ts}`],
       migrations: [`${__dirname}/migration/{.ts,*.js}`],
       migrationsRun: true,
+      synchronize: false,
     }),
     UserModule,
     StateModule,
