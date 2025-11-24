@@ -2,12 +2,49 @@
 
 Este repositório contém o backend para uma aplicação de vendas online, desenvolvido com o framework NestJS. O sistema oferece uma API RESTful completa para gerenciar usuários, produtos, carrinhos de compras, pedidos e pagamentos.
 
-## 💻 Front-end
+## 💻 Front-end & Interface
 
-Este back-end possui um front-end Angular separado que consome esta API. 
-Para rodar o sistema completo, clone e execute o front-end disponível em: 
+Este back-end possui um front-end Angular separado que consome esta API. Para testar a aplicação completa (interação usuário-sistema), acesse o repositório abaixo:
 
-[🔗 Acessar o Front-end](https://github.com/Marilio01/vendas-online-web)
+👉 [🔗 **Acessar Repositório do Front-end**](https://github.com/Marilio01/vendas-online-web)
+
+### 📸 Screenshots da Aplicação
+*(Abaixo estão exemplos da interface consumindo esta API)*
+
+Login | Tela do Cliente | Tela do Administrador |
+|:---:|:---:|:---:|
+| <img src="https://github.com/user-attachments/assets/be1ef1ed-2573-4b5f-a140-2a3ca2ed1b19" width="280" /> | <img src="https://github.com/user-attachments/assets/0b4efa57-1b31-4cf2-bcf6-dfd07acb31f5" width="280" /> | <img src="https://github.com/user-attachments/assets/435a6b9b-d0b2-4f17-99e6-f77fe4a9c34d" width="280" /> |
+
+### ▶️ Como rodar o Front-end
+1. Certifique-se de que este **Back-end** está rodando na porta `8080` (conforme instruções abaixo).
+2. Clone o repositório do front-end.
+3. Instale as dependências (`npm install`) e execute o projeto (`npm start` / `ng serve`).
+4. O front-end se conectará automaticamente à API local.
+
+## 📋 Mapeamento de Casos de Uso
+
+Abaixo estão os detalhes de implementação dos principais fluxos do sistema:
+
+### 1. Fazer Cadastro (Cliente)
+* **Descrição:** Permite o registro de novos usuários com criptografia de senha.
+* **Rota:** `POST /user`
+* **Implementação:**
+    * **Controller:** `UserController.createUser` (`src/user/user.controller.ts`)
+    * **Service:** `UserService.createUser` (`src/user/user.service.ts`) - Verifica duplicidade de e-mail/CPF e aplica hash na senha.
+
+### 2. Buscar Produtos (Cliente)
+* **Descrição:** Listagem paginada de produtos com filtro por nome.
+* **Rota:** `GET /product/page?search=...&page=1&size=10`
+* **Implementação:**
+    * **Controller:** `ProductController.findAllPage` (`src/product/product.controller.ts`)
+    * **Service:** `ProductService.findAllPage` (`src/product/product.service.ts`) - Utiliza `ILike` do Postgres para busca flexível.
+
+### 3. Realizar Compra (Cliente)
+* **Descrição:** Fecha o pedido convertendo o carrinho atual em uma ordem de compra, vinculando endereço e pagamento.
+* **Rota:** `POST /order`
+* **Implementação:**
+    * **Controller:** `OrderController.createOrder` (`src/order/order.controller.ts`)
+    * **Service:** `OrderService.createOrder` (`src/order/order.service.ts`) - Orquestra a validação do carrinho, cálculo final, processamento do pagamento e limpeza do carrinho.
 
 ## ⚙️ Principais Funcionalidades
 
@@ -38,32 +75,19 @@ O sistema foi projetado para ser a base de uma plataforma de e-commerce, resolve
 * **Database Migrations:**
     * Gerenciamento automatizado do esquema do banco de dados através das migrações do TypeORM.
 
-## ✨ Características do Sistema Desenvolvido
+## ✨ Características Técnicas
 
-* **Framework:** O projeto é construído sobre o **NestJS**, um framework Node.js progressivo que utiliza TypeScript, garantindo um código manutenível, escalável e bem-estruturado.
-
-* **Linguagem:** Desenvolvido em **TypeScript**, o que adiciona tipagem estática ao JavaScript, aumentando a robustez e a produtividade no desenvolvimento.
-
+* **Framework:** O projeto é construído sobre o **NestJS**, um framework Node.js progressivo que utiliza TypeScript.
+* **Linguagem:** Desenvolvido em **TypeScript**.
 * **Arquitetura:**
-    * **Arquitetura Modular:** O sistema é organizado em módulos (`UserModule`, `ProductModule`, `OrderModule`, etc.), promovendo uma clara separação de responsabilidades e facilitando a manutenção e a escalabilidade.
-    * **Princípios S.O.L.I.D:** A estrutura segue os princípios de design de software S.O.L.I.D para criar um código mais limpo e coeso.
-
-* **Banco de Dados e ORM:**
-    * Utiliza **PostgreSQL** como sistema de gerenciamento de banco de dados.
-    * O mapeamento objeto-relacional é gerenciado pelo **TypeORM**, que também é responsável pela execução automática das migrações de banco de dados (`migrationsRun: true`).
-
-* **Validação de Dados:**
-    * Uso intensivo de Data Transfer Objects (DTOs) em conjunto com os pacotes `class-validator` e `class-transformer` para garantir que os dados que chegam à API sejam válidos e seguros.
-
-* **Cache:**
-    * Implementa uma camada de cache com `@nestjs/cache-manager` para otimizar o desempenho de consultas frequentes, como a busca por cidades e estados.
+    * **Modular:** Organizado em módulos (`UserModule`, `ProductModule`, `OrderModule`, etc.).
+    * **S.O.L.I.D:** Estrutura seguindo boas práticas de design de software.
+* **Banco de Dados:** **PostgreSQL** com **TypeORM**.
+* **Testes:** Cobertura de testes unitários (`.spec.ts`) e testes de integração (`e2e`).
 
 ## 🚀 Instruções de Execução
 
-Siga os passos abaixo para instalar, configurar e executar o projeto em seu ambiente local.
-
 ### Pré-requisitos
-
 * [Node.js](https://nodejs.org/) (versão >= 20.11)
 * Uma instância do **PostgreSQL** em execução
 
@@ -88,11 +112,7 @@ npm install
 
 ### 2. Configuração do Ambiente
 
-O projeto utiliza variáveis de ambiente para configurar a conexão com o banco de dados e outras configurações sensíveis.
-
 Crie um arquivo chamado `.env.development.local` na raiz do projeto.
-
-Preencha o arquivo com as seguintes variáveis, substituindo pelos valores do seu ambiente local:
 
 ```env
 # Configurações do Banco de Dados PostgreSQL
@@ -115,37 +135,23 @@ PORT=8080
 
 ### 3. Executando a Aplicação
 
-Com as dependências instaladas e o ambiente configurado, você pode executar a aplicação com os seguintes comandos:
-
-#### Modo de Desenvolvimento (com watch)
-
 ```bash
+# Desenvolvimento
 npm run start:dev
-```
 
-#### Modo de Produção
-
-```bash
-# 1. Compilar o projeto
+# Produção
 npm run build
-
-# 2. Iniciar o servidor de produção
 npm run start:prod
 ```
 
 ### 4. Executando os Testes
 
-O projeto conta com uma suíte de testes unitários e de integração. Para executá-los, utilize:
-
 ```bash
-# Executar todos os testes
+# Testes Unitários
 npm run test
 
-# Executar os testes em modo watch
-npm run test:watch
-
-# Gerar o relatório de cobertura de testes
-npm run test:cov
+# Testes de Integração (E2E)
+npm run test:e2e
 ```
 
 ## 🖼️ Modelo de Dados
